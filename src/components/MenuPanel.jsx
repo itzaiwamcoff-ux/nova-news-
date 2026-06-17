@@ -2,6 +2,7 @@ import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import { useGlass } from '../context/GlassContext'
 import ThemeToggle from './ThemeToggle'
 
 const menuItems = [
@@ -14,6 +15,7 @@ const menuItems = [
 export default function MenuPanel({ isOpen, onClose }) {
   const navigate = useNavigate()
   const { isDark } = useTheme()
+  const { menuOpacity, menuBlur } = useGlass()
 
   const handleNavigate = (path) => {
     navigate(path)
@@ -41,11 +43,17 @@ export default function MenuPanel({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-sm z-50 glass overflow-y-auto"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-sm z-50 overflow-y-auto"
             style={{
+              background: isDark
+                ? `rgba(0, 43, 71, ${Math.min(menuOpacity + 0.1, 0.95)})`
+                : `rgba(255, 255, 255, ${Math.min(menuOpacity + 0.1, 0.95)})`,
+              backdropFilter: `blur(${menuBlur}px) saturate(180%)`,
+              WebkitBackdropFilter: `blur(${menuBlur}px) saturate(180%)`,
               borderLeft: '1px solid var(--nova-glass-border)',
               borderTopLeftRadius: '24px',
               borderBottomLeftRadius: '24px',
+              boxShadow: `inset 0 1px 0 rgba(255,255,255,${isDark ? '0.15' : '0.4'}), 0 18px 60px var(--nova-glass-shadow)`,
             }}
           >
             <div className="p-6">

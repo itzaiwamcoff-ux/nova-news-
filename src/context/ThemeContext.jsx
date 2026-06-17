@@ -11,6 +11,11 @@ export function ThemeProvider({ children }) {
 
   const [mounted, setMounted] = useState(false)
 
+  // Admin auth state
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return localStorage.getItem('nova-admin') === 'true'
+  })
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -30,8 +35,25 @@ export function ThemeProvider({ children }) {
     setIsDark(prev => !prev)
   }, [])
 
+  const loginAdmin = useCallback((email, password) => {
+    if (email === 'admin@gmail.com' && password === 'admin123') {
+      localStorage.setItem('nova-admin', 'true')
+      setIsAdmin(true)
+      return true
+    }
+    return false
+  }, [])
+
+  const logoutAdmin = useCallback(() => {
+    localStorage.removeItem('nova-admin')
+    setIsAdmin(false)
+  }, [])
+
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme, mounted }}>
+    <ThemeContext.Provider value={{
+      isDark, toggleTheme, mounted,
+      isAdmin, loginAdmin, logoutAdmin
+    }}>
       {children}
     </ThemeContext.Provider>
   )

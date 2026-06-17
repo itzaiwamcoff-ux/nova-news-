@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import { useGlass } from '../context/GlassContext'
 import ThemeToggle from './ThemeToggle'
 import TabSwitcher from './TabSwitcher'
 import MenuPanel from './MenuPanel'
@@ -13,6 +14,7 @@ export default function Navbar({ activeTab, onTabChange }) {
   const [scrolled, setScrolled] = useState(false)
   const [user, setUser] = useState(null)
   const { isDark } = useTheme()
+  const { navbarOpacity, navbarBlur } = useGlass()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -63,9 +65,20 @@ export default function Navbar({ activeTab, onTabChange }) {
       >
         <div className="max-w-[1400px] mx-auto px-4">
           <div
-            className={`glass rounded-2xl px-5 py-2.5 transition-all duration-500 ${
+            className={`rounded-2xl px-5 py-2.5 transition-all duration-500 ${
               scrolled ? 'shadow-lg' : ''
             }`}
+            style={{
+              background: isDark
+                ? `rgba(0, 43, 71, ${Math.min(navbarOpacity + 0.3, 0.9)})`
+                : `rgba(255, 255, 255, ${navbarOpacity})`,
+              backdropFilter: `blur(${navbarBlur}px) saturate(180%)`,
+              WebkitBackdropFilter: `blur(${navbarBlur}px) saturate(180%)`,
+              border: '1px solid var(--nova-glass-border)',
+              boxShadow: scrolled
+                ? `inset 0 1px 0 rgba(255,255,255,${isDark ? '0.15' : '0.4'}), 0 8px 32px var(--nova-glass-shadow)`
+                : `inset 0 1px 0 rgba(255,255,255,${isDark ? '0.15' : '0.4'})`,
+            }}
           >
             <div className="flex items-center justify-between">
               {/* Left: Logo + Auth */}
@@ -125,7 +138,16 @@ export default function Navbar({ activeTab, onTabChange }) {
               {/* Center: Language/Tab Switcher */}
               {isHome && (
                 <div className="hidden md:flex items-center">
-                  <div className="glass rounded-full px-2 py-1">
+                  <div className="rounded-full px-2 py-1"
+                    style={{
+                      background: isDark
+                        ? `rgba(0, 43, 71, ${Math.min(navbarOpacity + 0.25, 0.9)})`
+                        : `rgba(255, 255, 255, ${Math.min(navbarOpacity + 0.05, 0.5)})`,
+                      backdropFilter: `blur(${navbarBlur}px) saturate(180%)`,
+                      WebkitBackdropFilter: `blur(${navbarBlur}px) saturate(180%)`,
+                      border: '1px solid var(--nova-glass-border)',
+                    }}
+                  >
                     <TabSwitcher activeTab={activeTab} onTabChange={onTabChange} />
                   </div>
                 </div>

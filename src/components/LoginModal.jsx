@@ -1,19 +1,47 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '../context/ThemeContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function LoginModal({ isOpen, onClose }) {
   const [mode, setMode] = useState('login')
-  const { isDark } = useTheme()
+  const { isDark, loginAdmin } = useTheme()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({ name: '', email: '', password: '' })
+  const [error, setError] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Store user session in localStorage
+    setError('')
+
+    // Check for admin credentials
+    const isAdminLogin = loginAdmin(formData.email, formData.password)
+
+    if (isAdminLogin) {
+      // Admin login successful
+      localStorage.setItem('nova-user', JSON.stringify({
+        name: 'Admin',
+        email: formData.email,
+        isLoggedIn: true,
+        isAdmin: true,
+      }))
+      onClose()
+      window.dispatchEvent(new Event('auth-change'))
+      navigate('/admin')
+      return
+    }
+
+    // Regular user login (for signup or non-admin)
+    if (formData.email === 'admin@gmail.com') {
+      setError('Invalid admin password')
+      return
+    }
+
     localStorage.setItem('nova-user', JSON.stringify({
       name: formData.name || formData.email.split('@')[0],
       email: formData.email,
-      isLoggedIn: true
+      isLoggedIn: true,
+      isAdmin: false,
     }))
     onClose()
     window.dispatchEvent(new Event('auth-change'))
@@ -21,6 +49,7 @@ export default function LoginModal({ isOpen, onClose }) {
 
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    if (error) setError('')
   }
 
   return (
@@ -67,7 +96,9 @@ export default function LoginModal({ isOpen, onClose }) {
                   {mode === 'login' ? 'Welcome Back' : 'Create Account'}
                 </h2>
                 <p className="text-sm" style={{ color: 'var(--nova-text-secondary)' }}>
-                  {mode === 'login' ? 'Sign in to your Nova account' : 'Join the Nova community'}
+                  {mode === 'login'
+                    ? 'Sign in to your Nova account'
+                    : 'Join the Nova community'}
                 </p>
               </div>
 
@@ -76,9 +107,7 @@ export default function LoginModal({ isOpen, onClose }) {
                 <button
                   onClick={() => setMode('login')}
                   className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    mode === 'login'
-                      ? 'text-white'
-                      : ''
+                    mode === 'login' ? 'text-white' : ''
                   }`}
                   style={
                     mode === 'login'
@@ -91,9 +120,7 @@ export default function LoginModal({ isOpen, onClose }) {
                 <button
                   onClick={() => setMode('signup')}
                   className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    mode === 'signup'
-                      ? 'text-white'
-                      : ''
+                    mode === 'signup' ? 'text-white' : ''
                   }`}
                   style={
                     mode === 'signup'
@@ -134,6 +161,9 @@ export default function LoginModal({ isOpen, onClose }) {
                     className="comment-input !min-h-[0px] py-3"
                     required
                   />
+                  <p className="text-[10px] mt-1" style={{ color: 'var(--nova-text-secondary)' }}>
+                    Admin: admin@gmail.com
+                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--nova-text-secondary)' }}>
@@ -147,7 +177,22 @@ export default function LoginModal({ isOpen, onClose }) {
                     className="comment-input !min-h-[0px] py-3"
                     required
                   />
+                  <p className="text-[10px] mt-1" style={{ color: 'var(--nova-text-secondary)' }}>
+                    Admin password: admin123
+                  </p>
                 </div>
+
+                {/* Error message */}
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-xs font-medium"
+                    style={{ color: '#DC2626' }}
+                  >
+                    {error}
+                  </motion.p>
+                )}
 
                 <motion.button
                   type="submit"

@@ -1,7 +1,8 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { useTheme } from './context/ThemeContext'
+import { GlassProvider } from './context/GlassContext'
 import Home from './pages/Home'
 import Article from './pages/Article'
 import Admin from './pages/Admin'
@@ -33,6 +34,15 @@ function LoadingScreen() {
   )
 }
 
+// Protected Admin Route
+function AdminRoute({ children }) {
+  const { isAdmin } = useTheme()
+  if (!isAdmin) {
+    return <Navigate to="/" replace />
+  }
+  return children
+}
+
 export default function App() {
   const { mounted } = useTheme()
 
@@ -41,12 +51,21 @@ export default function App() {
   }
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/article/:id" element={<Article />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-    </AnimatePresence>
+    <GlassProvider>
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/article/:id" element={<Article />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+    </GlassProvider>
   )
 }

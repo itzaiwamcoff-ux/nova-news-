@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '../context/ThemeContext'
+import { useGlass } from '../context/GlassContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { articles, CATEGORIES } from '../data/news'
@@ -25,8 +26,63 @@ function StatCard({ icon, label, value, accentColor }) {
   )
 }
 
+function GlassSlider({ label, value, min, max, step, onChange, unit }) {
+  const { isDark } = useTheme()
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium" style={{ color: 'var(--nova-text)' }}>{label}</label>
+        <span className="text-xs font-mono" style={{ color: 'var(--nova-accent)' }}>
+          {value}{unit}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={e => onChange(parseFloat(e.target.value))}
+        className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+        style={{
+          background: `linear-gradient(to right, var(--nova-accent) 0%, var(--nova-accent) ${((value - min) / (max - min)) * 100}%, var(--nova-glass-bg) ${((value - min) / (max - min)) * 100}%, var(--nova-glass-bg) 100%)`,
+          outline: 'none',
+        }}
+      />
+      <style>{`
+        input[type='range']::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--nova-accent);
+          border: 2px solid ${isDark ? '#002B47' : 'white'};
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          transition: transform 0.15s ease;
+        }
+        input[type='range']::-webkit-slider-thumb:hover {
+          transform: scale(1.15);
+        }
+        input[type='range']::-moz-range-thumb {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--nova-accent);
+          border: 2px solid ${isDark ? '#002B47' : 'white'};
+          cursor: pointer;
+        }
+      `}</style>
+    </div>
+  )
+}
+
 export default function Admin() {
   const { isDark } = useTheme()
+  const {
+    navbarOpacity, navbarBlur, menuOpacity, menuBlur,
+    updateNavbarGlass, updateMenuGlass, resetDefaults,
+  } = useGlass()
   const [activeTab, setActiveTab] = useState('articles')
   const [commentCount, setCommentCount] = useState(0)
   const [showAddForm, setShowAddForm] = useState(false)
@@ -48,8 +104,6 @@ export default function Admin() {
   }, [])
 
   const handleDeleteArticle = (id) => {
-    // In a real app, this would call an API
-    // For demo, we remove from displayed list (data is from a static array)
     alert('Article removed. In production this would call your API.')
   }
 
@@ -135,13 +189,18 @@ export default function Admin() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
-    // In production this would save to a database
     alert(editingArticle
       ? 'Article updated! In production this would save to your database.'
       : 'Article created! In production this would save to your database.'
     )
     resetForm()
   }
+
+  const tabs = [
+    { id: 'articles', label: 'Articles' },
+    { id: 'comments', label: 'Comments' },
+    { id: 'glass', label: 'Glass Settings' },
+  ]
 
   return (
     <div className="min-h-[100dvh]" style={{ background: 'var(--nova-bg)' }}>
@@ -164,7 +223,7 @@ export default function Admin() {
             </span>
           </div>
           <p className="text-sm" style={{ color: 'var(--nova-text-secondary)' }}>
-            Manage your news articles, comments, and site content.
+            Manage your news articles, comments, and glass transparency settings.
           </p>
         </motion.div>
 
@@ -185,19 +244,14 @@ export default function Admin() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="flex gap-2 mb-6"
+          className="flex gap-2 mb-6 flex-wrap"
         >
-          {[
-            { id: 'articles', label: 'Articles' },
-            { id: 'comments', label: 'Comments' },
-          ].map(tab => (
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 text-sm font-medium rounded-xl transition-all ${
-                activeTab === tab.id
-                  ? 'text-white'
-                  : 'glass-button'
+                activeTab === tab.id ? 'text-white' : 'glass-button'
               }`}
               style={activeTab === tab.id ? { background: 'var(--nova-accent)' } : {}}
             >
@@ -214,7 +268,6 @@ export default function Admin() {
             key="articles"
             className="space-y-4"
           >
-            {/* Add Article Button + Form Toggle */}
             <div className="flex justify-end">
               <button
                 onClick={() => { resetForm(); setShowAddForm(!showAddForm) }}
@@ -235,7 +288,6 @@ export default function Admin() {
               </button>
             </div>
 
-            {/* Add/Edit Form */}
             <AnimatePresence>
               {showAddForm && (
                 <motion.div
@@ -320,9 +372,7 @@ export default function Admin() {
                       </div>
                     </div>
                     <div className="flex justify-end gap-3 pt-2">
-                      <button type="button" onClick={resetForm} className="glass-button text-sm">
-                        Cancel
-                      </button>
+                      <button type="button" onClick={resetForm} className="glass-button text-sm">Cancel</button>
                       <motion.button
                         type="submit"
                         className="px-5 py-2 rounded-xl text-sm font-semibold"
@@ -338,7 +388,6 @@ export default function Admin() {
               )}
             </AnimatePresence>
 
-            {/* Articles Table */}
             <div className="glass-card overflow-hidden" style={{ border: '1px solid var(--nova-glass-border)', borderRadius: '16px' }}>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -364,21 +413,12 @@ export default function Admin() {
                       >
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <img
-                              src={article.image}
-                              alt=""
-                              className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
-                            />
-                            <span className="font-medium line-clamp-1" style={{ color: 'var(--nova-text)' }}>
-                              {article.title}
-                            </span>
+                            <img src={article.image} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                            <span className="font-medium line-clamp-1" style={{ color: 'var(--nova-text)' }}>{article.title}</span>
                           </div>
                         </td>
                         <td className="p-4 hide-mobile">
-                          <span className="text-xs px-2 py-0.5 rounded-full" style={{
-                            background: `${'#0066FF'}15`,
-                            color: '#0066FF',
-                          }}>
+                          <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: `${'#0066FF'}15`, color: '#0066FF' }}>
                             {article.category}
                           </span>
                         </td>
@@ -387,24 +427,14 @@ export default function Admin() {
                         <td className="p-4 text-center" style={{ color: 'var(--nova-text-secondary)' }}>{getCommentCount(article.id)}</td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <button
-                              onClick={() => handleEditArticle(article)}
-                              className="p-2 rounded-lg transition-colors hover:bg-[var(--nova-glass-bg)]"
-                              title="Edit"
-                            >
+                            <button onClick={() => handleEditArticle(article)} className="p-2 rounded-lg transition-colors hover:bg-[var(--nova-glass-bg)]" title="Edit">
                               <svg viewBox="0 0 24 24" fill="none" stroke={isDark ? 'white' : 'black'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                               </svg>
                             </button>
-                            <button
-                              onClick={() => handleDeleteArticle(article.id)}
-                              className="p-2 rounded-lg transition-colors hover:bg-red-100 dark:hover:bg-red-900/20"
-                              title="Delete"
-                            >
+                            <button onClick={() => handleDeleteArticle(article.id)} className="p-2 rounded-lg transition-colors hover:bg-red-100 dark:hover:bg-red-900/20" title="Delete">
                               <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                                <polyline points="3 6 5 6 21 6" />
-                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                                <polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
                               </svg>
                             </button>
                           </div>
@@ -416,54 +446,153 @@ export default function Admin() {
               </div>
             </div>
           </motion.div>
-        ) : (
-          /* Comments Tab */
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            key="comments"
-          >
+        ) : activeTab === 'comments' ? (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} key="comments">
             <div className="glass-card p-6" style={{ border: '1px solid var(--nova-glass-border)', borderRadius: '16px' }}>
-              <h3 className="text-lg font-bold font-display mb-4" style={{ color: 'var(--nova-text)' }}>
-                All Comments
-              </h3>
+              <h3 className="text-lg font-bold font-display mb-4" style={{ color: 'var(--nova-text)' }}>All Comments</h3>
               {commentCount === 0 ? (
                 <div className="text-center py-12">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={isDark ? 'white' : 'black'}
-                    strokeWidth="1"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-12 h-12 mx-auto mb-3 opacity-20"
-                  >
+                  <svg viewBox="0 0 24 24" fill="none" stroke={isDark ? 'white' : 'black'} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="w-12 h-12 mx-auto mb-3 opacity-20">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
                   </svg>
-                  <p className="text-sm" style={{ color: 'var(--nova-text-secondary)' }}>
-                    No comments yet. Comments from readers will appear here.
-                  </p>
+                  <p className="text-sm" style={{ color: 'var(--nova-text-secondary)' }}>No comments yet. Comments from readers will appear here.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {articles.map(article => {
-                    const commentCount = getCommentCount(article.id)
-                    if (commentCount === 0) return null
+                    const count = getCommentCount(article.id)
+                    if (count === 0) return null
                     return (
                       <div key={article.id} className="p-4 rounded-xl" style={{ background: 'var(--nova-glass-bg)' }}>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium line-clamp-1" style={{ color: 'var(--nova-text)' }}>
-                            {article.title}
-                          </span>
-                          <span className="text-xs flex-shrink-0 ml-4" style={{ color: 'var(--nova-text-secondary)' }}>
-                            {commentCount} comment{commentCount !== 1 ? 's' : ''}
-                          </span>
+                          <span className="text-sm font-medium line-clamp-1" style={{ color: 'var(--nova-text)' }}>{article.title}</span>
+                          <span className="text-xs flex-shrink-0 ml-4" style={{ color: 'var(--nova-text-secondary)' }}>{count} comment{count !== 1 ? 's' : ''}</span>
                         </div>
                       </div>
                     )
                   })}
                 </div>
               )}
+            </div>
+          </motion.div>
+        ) : (
+          /* Glass Settings Tab */
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            key="glass"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          >
+            {/* Navbar Glass Settings */}
+            <div className="glass-card p-6" style={{ border: '1px solid var(--nova-glass-border)', borderRadius: '16px' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${'#0066FF'}20` }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <path d="M22 6l-10 7L2 6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold font-display" style={{ color: 'var(--nova-text)' }}>Navbar & Center Menu</h3>
+                  <p className="text-xs" style={{ color: 'var(--nova-text-secondary)' }}>Adjust the top navigation glass effect</p>
+                </div>
+              </div>
+
+              <div className="space-y-5">
+                <GlassSlider
+                  label="Background Opacity"
+                  value={navbarOpacity}
+                  min={0.02}
+                  max={0.9}
+                  step={0.01}
+                  onChange={v => updateNavbarGlass(v, navbarBlur)}
+                  unit=""
+                />
+                <GlassSlider
+                  label="Blur Amount"
+                  value={navbarBlur}
+                  min={2}
+                  max={50}
+                  step={1}
+                  onChange={v => updateNavbarGlass(navbarOpacity, v)}
+                  unit="px"
+                />
+              </div>
+
+              {/* Preview */}
+              <div className="mt-6 p-3 rounded-xl text-xs text-center" style={{
+                background: isDark
+                  ? `rgba(0, 43, 71, ${Math.min(navbarOpacity + 0.3, 0.9)})`
+                  : `rgba(255, 255, 255, ${navbarOpacity})`,
+                backdropFilter: `blur(${navbarBlur}px)`,
+                border: '1px solid var(--nova-glass-border)',
+              }}>
+                <span style={{ color: 'var(--nova-text)' }}>Navbar Preview</span>
+              </div>
+            </div>
+
+            {/* Menu Panel Glass Settings */}
+            <div className="glass-card p-6" style={{ border: '1px solid var(--nova-glass-border)', borderRadius: '16px' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${'#7C3AED'}20` }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold font-display" style={{ color: 'var(--nova-text)' }}>Right Slide Menu</h3>
+                  <p className="text-xs" style={{ color: 'var(--nova-text-secondary)' }}>Adjust the side menu panel glass effect</p>
+                </div>
+              </div>
+
+              <div className="space-y-5">
+                <GlassSlider
+                  label="Background Opacity"
+                  value={menuOpacity}
+                  min={0.02}
+                  max={0.95}
+                  step={0.01}
+                  onChange={v => updateMenuGlass(v, menuBlur)}
+                  unit=""
+                />
+                <GlassSlider
+                  label="Blur Amount"
+                  value={menuBlur}
+                  min={2}
+                  max={50}
+                  step={1}
+                  onChange={v => updateMenuGlass(menuOpacity, v)}
+                  unit="px"
+                />
+              </div>
+
+              {/* Preview */}
+              <div className="mt-6 p-3 rounded-xl text-xs text-right" style={{
+                background: isDark
+                  ? `rgba(0, 43, 71, ${Math.min(menuOpacity + 0.1, 0.95)})`
+                  : `rgba(255, 255, 255, ${Math.min(menuOpacity + 0.1, 0.95)})`,
+                backdropFilter: `blur(${menuBlur}px)`,
+                border: '1px solid var(--nova-glass-border)',
+                borderTopRightRadius: '0',
+                borderBottomRightRadius: '0',
+              }}>
+                <span style={{ color: 'var(--nova-text)' }}>Menu Preview</span>
+              </div>
+            </div>
+
+            {/* Reset Button */}
+            <div className="lg:col-span-2 flex justify-center">
+              <motion.button
+                onClick={resetDefaults}
+                className="glass-button flex items-center gap-2 text-sm"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke={isDark ? 'white' : 'black'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                  <polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+                </svg>
+                Reset to Defaults
+              </motion.button>
             </div>
           </motion.div>
         )}
