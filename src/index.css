@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  :root {
+    --nova-bg: #E6F5FF;
+    --nova-surface: rgba(255, 255, 255, 0.7);
+    --nova-text: #1a1a2e;
+    --nova-text-secondary: #4a4a6a;
+    --nova-glass-bg: rgba(255, 255, 255, 0.15);
+    --nova-glass-border: rgba(255, 255, 255, 0.25);
+    --nova-glass-shadow: rgba(0, 0, 0, 0.08);
+    --nova-card-bg: rgba(255, 255, 255, 0.6);
+    --nova-accent: #0066FF;
+    --nova-accent-hover: #0052CC;
+    --nova-overlay: rgba(0, 0, 0, 0.3);
+  }
+
+  .dark {
+    --nova-bg: #002B47;
+    --nova-surface: rgba(0, 43, 71, 0.7);
+    --nova-text: #e8edf0;
+    --nova-text-secondary: #8a9aa8;
+    --nova-glass-bg: rgba(0, 43, 71, 0.6);
+    --nova-glass-border: rgba(255, 255, 255, 0.08);
+    --nova-glass-shadow: rgba(0, 0, 0, 0.3);
+    --nova-card-bg: rgba(0, 43, 71, 0.5);
+    --nova-accent: #4D9FFF;
+    --nova-accent-hover: #66ADFF;
+    --nova-overlay: rgba(0, 0, 0, 0.5);
+  }
+
+  body {
+    background-color: var(--nova-bg);
+    color: var(--nova-text);
+  }
+
+  ::selection {
+    background-color: var(--nova-accent);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.5);
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--nova-glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--nova-glass-border);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 32px var(--nova-glass-shadow);
+  }
+
+  .dark .glass {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px var(--nova-glass-shadow);
+  }
+
+  .glass-card {
+    background: var(--nova-card-bg);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid var(--nova-glass-border);
+    border-radius: 16px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--nova-glass-shadow);
+    border-color: var(--nova-accent);
+  }
+
+  .glass-button {
+    background: var(--nova-glass-bg);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid var(--nova-glass-border);
+    border-radius: 12px;
+    padding: 0.5rem 1.25rem;
+    color: var(--nova-text);
+    font-weight: 500;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+
+  .glass-button:hover {
+    background: var(--nova-accent);
+    color: white;
+    border-color: var(--nova-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 102, 255, 0.25);
+  }
+
+  .glass-button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .nova-gradient {
+    background: linear-gradient(135deg, var(--nova-accent), #00CCFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nova-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--nova-glass-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--nova-glass-border);
+  }
+
+  /* Shimmer skeleton loader */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .dark .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Tab active indicator */
+  .tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: var(--nova-accent);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Menu overlay */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 40;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Page transition */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Glass island for center menu on mobile */
+  .glass-island {
+    background: var(--nova-glass-bg);
+    backdrop-filter: blur(24px) saturate(180%) contrast(1.05);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) contrast(1.05);
+    border: 1px solid var(--nova-glass-border);
+    border-radius: 999px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.48),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 60px var(--nova-glass-shadow);
+  }
+
+  .dark .glass-island {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 18px 60px var(--nova-glass-shadow);
+  }
+
+  /* Comment input styling */
+  .comment-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--nova-glass-border);
+    background: var(--nova-glass-bg);
+    color: var(--nova-text);
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .comment-input:focus {
+    border-color: var(--nova-accent);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+  }
+
+  .comment-input::placeholder {
+    color: var(--nova-text-secondary);
+    opacity: 0.6;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
