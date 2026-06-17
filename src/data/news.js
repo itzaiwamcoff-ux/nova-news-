@@ -25,7 +25,7 @@ Microsoft is taking a different approach with its next Xbox, focusing on cloud i
 Nintendo continues to chart its own course. The successor to the Switch is expected to launch with a significant technological leap while maintaining the hybrid portable-home console form factor. Developers who have seen early kits describe the device as "surprisingly powerful for its size" with DLSS-like upscaling capabilities.
 
 All three consoles are expected to launch within a twelve-month window beginning late next year, setting up the most competitive console landscape in gaming history.`,
-    image: 'https://picsum.photos/seed/gaming-console/800/500',
+    image: 'https://picsum.photos/seed/gaming-console/800/500.webp',
     category: 'game',
     author: 'Alex Chen',
     date: '2026-06-15',
@@ -45,7 +45,7 @@ The breakthrough centers on a new qubit design that uses electron spins in silic
 The team demonstrated the processor running Shor's algorithm to factor a 21-bit number — a small demonstration, but one that the researchers say scales linearly with additional qubits. They project that a 1000-qubit processor could be demonstrated within three years.
 
 Industry analysts have already called the development "the most significant quantum computing advance in a decade." Major tech companies, including IBM and Google, have announced plans to license the technology for their quantum computing initiatives.`,
-    image: 'https://picsum.photos/seed/quantum-lab/800/500',
+    image: 'https://picsum.photos/seed/quantum-lab/800/500.webp',
     category: 'science',
     author: 'Dr. Rachel Park',
     date: '2026-06-16',
@@ -65,7 +65,7 @@ In practical terms, this means an electric vehicle with a 500-mile range that ca
 "This is not a laboratory curiosity," said QuantumVolt CEO Maria Torres. "We have secured manufacturing partnerships with three major automotive manufacturers and will begin shipping production cells in Q1 of 2028."
 
 The announcement sent shares of QuantumVolt up 35% in after-hours trading, while lithium mining stocks fell sharply on concerns about reduced demand for lithium.`,
-    image: 'https://picsum.photos/seed/ev-battery/800/500',
+    image: 'https://picsum.photos/seed/ev-battery/800/500.webp',
     category: 'tech',
     author: 'James Liu',
     date: '2026-06-16',
@@ -85,7 +85,7 @@ The game world spans five distinct kingdoms, each with its own culture, politics
 "We are building systems that react to player agency in ways that feel meaningful and surprising," Vasquez said. "If you help one kingdom conquer another, that kingdom's culture will spread, its language will become dominant, and refugees from the conquered land will remember."
 
 Aethelgard is expected to launch in late 2027 for PC and next-generation consoles.`,
-    image: 'https://picsum.photos/seed/rpg-game/800/500',
+    image: 'https://picsum.photos/seed/rpg-game/800/500.webp',
     category: 'game',
     author: 'Maya Wright',
     date: '2026-06-14',
@@ -105,7 +105,7 @@ The platform's exponential growth has been driven by its ability to perform comp
 The milestone has not been without controversy. Critics point to concerns about data privacy, the environmental impact of the massive computing infrastructure required, and the potential for job displacement. Sentient AI has announced a $100 million fund to support research into ethical AI development.
 
 The company's CEO, Amara Osei, stated: "Our goal has always been to augment human potential, not replace it. We are committed to building responsibly and transparently."`,
-    image: 'https://picsum.photos/seed/ai-platform/800/500',
+    image: 'https://picsum.photos/seed/ai-platform/800/500.webp',
     category: 'tech',
     author: 'Sam Rivera',
     date: '2026-06-13',
@@ -125,7 +125,7 @@ The grand finals against two-time defending champions Team Apex went the full se
 The victory comes with a $4 million prize pool, but more importantly, it changes the competitive landscape. Several top players from established teams have already announced they will enter free agency, hoping to join Vortex for the next season.
 
 The viewership numbers broke all previous records, with 3.2 million concurrent viewers across streaming platforms — more than many traditional sporting events.`,
-    image: 'https://picsum.photos/seed/esports/800/500',
+    image: 'https://picsum.photos/seed/esports/800/500.webp',
     category: 'sports',
     author: 'Derek Nakamura',
     date: '2026-06-12',
@@ -145,7 +145,7 @@ The combined entity, to be called VaultFlux, will control approximately 40% of t
 However, the merger faces significant regulatory hurdles. Antitrust regulators in both the United States and European Union have signaled deep concerns about market concentration. Consumer advocacy groups have warned that the merger could lead to higher prices and less choice.
 
 Industry analyst Marcus Webb noted: "The streaming industry was bound to consolidate. There are too many services chasing too few subscribers. This is likely the first of several major mergers we will see over the next two years."`,
-    image: 'https://picsum.photos/seed/streaming/800/500',
+    image: 'https://picsum.photos/seed/streaming/800/500.webp',
     category: 'entertainment',
     author: 'Olivia Hart',
     date: '2026-06-11',
@@ -167,7 +167,7 @@ The colony now produces approximately 30% of its own food, with plans to expand 
 The success has implications beyond Mars. The agricultural technologies developed for the colony are being adapted for use in arid regions on Earth, where water scarcity and poor soil quality limit traditional farming.
 
 NASA has already announced plans to expand the colony's agricultural capacity, with additional modules scheduled for delivery on the next cargo mission.`,
-    image: 'https://picsum.photos/seed/mars-farm/800/500',
+    image: 'https://picsum.photos/seed/mars-farm/800/500.webp',
     category: 'science',
     author: 'Dr. Rachel Park',
     date: '2026-06-10',
@@ -187,7 +187,7 @@ The headset's breakthrough is its avatar system. Using a combination of outward-
 Early reviewers have been impressed. "I forgot I was wearing a headset," wrote one technology journalist. "The person I was talking to appeared to be sitting across from me in my own office. When they pointed at something, I naturally looked where they were pointing."
 
 The Aura headset is priced at $1,499 and is available for preorder now, with shipping expected in Q3. The company has already secured partnerships with major enterprise software companies to integrate Aura with existing collaboration tools.`,
-    image: 'https://picsum.photos/seed/ar-headset/800/500',
+    image: 'https://picsum.photos/seed/ar-headset/800/500.webp',
     category: 'tech',
     author: 'Sam Rivera',
     date: '2026-06-09',
@@ -209,7 +209,7 @@ The accord also establishes graduated response protocols. Minor attacks trigger 
 Privacy advocates have raised concerns about the scope of intelligence sharing and the potential for surveillance. The accord includes provisions for oversight, with an independent panel of judges and technical experts authorized to audit the system and investigate abuses.
 
 The first test of the accord came within 48 hours of signing, when a coordinated ransomware attack targeting hospitals in three member countries was detected, shared, and neutralized within hours.`,
-    image: 'https://picsum.photos/seed/cybersecurity/800/500',
+    image: 'https://picsum.photos/seed/cybersecurity/800/500.webp',
     category: 'business',
     author: 'James Liu',
     date: '2026-06-08',
@@ -229,7 +229,7 @@ The game tells the story of two characters across parallel timelines who can com
 Developers Kai Nakamura and Sofia Rossi built the game in their spare room, supporting themselves with freelance work. "We believed in this vision even when it seemed impossible," Nakamura said. "We wanted to create something that used the unique strengths of video games as a storytelling medium."
 
 The game has sold over two million copies in its first week and has already been nominated for multiple Game of the Year awards. A film adaptation is reportedly in early development.`,
-    image: 'https://picsum.photos/seed/indie-game/800/500',
+    image: 'https://picsum.photos/seed/indie-game/800/500.webp',
     category: 'game',
     author: 'Maya Wright',
     date: '2026-06-07',
@@ -251,7 +251,7 @@ The decision follows years of controversy as amputee sprinters using advanced bl
 The announcement has divided the sporting community. Supporters praise the move as inclusive and forward-thinking. Critics argue that it opens the door to "technological doping" and fundamentally alters the nature of sport.
 
 The first Augmented World Championships will be held in 2028, with events including track and field, swimming, and weightlifting. Eligibility standards and approved technologies will be determined by a new commission of scientists, athletes, and ethicists.`,
-    image: 'https://picsum.photos/seed/augmented-sport/800/500',
+    image: 'https://picsum.photos/seed/augmented-sport/800/500.webp',
     category: 'sports',
     author: 'Derek Nakamura',
     date: '2026-06-06',
